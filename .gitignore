@@ -24,4 +24,7 @@ communicator-*.tar
 
 # Ignore idea files
 /.idea/**/*
+/ui/.gradle/*
+/ui/.idea/*
+/ui/out/*
 *.iml
