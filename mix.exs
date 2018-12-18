@@ -14,6 +14,7 @@ defmodule Communicator.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
+      applications: [:couchdb_connector],
       extra_applications: [:logger]
     ]
   end
@@ -25,7 +26,8 @@ defmodule Communicator.MixProject do
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
 
       {:earmark, "~> 1.2", only: :dev},
-      {:ex_doc, "~> 0.19", only: :dev}
+      {:ex_doc, "~> 0.19", only: :dev},
+      {:couchdb_connector, "~> 0.5.0"}
 
     ]
   end
