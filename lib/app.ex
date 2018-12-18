@@ -1,15 +1,13 @@
 defmodule App do
   alias Main.Couch.Base, as: Base
   @moduledoc """
-  Главное приложение. Запускает супервизор при старте
+  Главное приложение. Запускает супервизор и инициализирует БД при старте
   """
 
   use Application
 
   def start(_type, _args) do
-    Main.Supervisor.start_link()
     Base.init_()
-    dbs = Base.get_dbs()
-    dbs
+    Main.Supervisor.start_link()
   end
 end

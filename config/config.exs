@@ -31,5 +31,7 @@ use Mix.Config
 config :communicator, database_protocol: "http"
 config :communicator, database_hostname: "localhost"
 config :communicator, database_port: 5984
-config :communicator, database_database: "dbtest"
+config :communicator, database_name: "dbtest"
 config :communicator, app_name: "communicator"
+config :communicator, user: ""
+config :communicator, password: ""

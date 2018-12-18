@@ -4,20 +4,27 @@ defmodule Main.Couch.Db do
   alias Couchdb.Connector
   alias Main.Couch.Util
 
-  @couch_config %{protocol: Application.get_env(:communicator, :database_protocol), hostname: Application.get_env(:communicator, :database_hostname), database: Application.get_env(:communicator, :database_database), port: Application.get_env(:communicator, :database_port)}
+  @couch_config %{
+    protocol: Application.get_env(:communicator, :database_protocol),
+    hostname: Application.get_env(:communicator, :database_hostname),
+    database: Application.get_env(:communicator, :database_name),
+    port: Application.get_env(:communicator, :database_port)
+  }
 
   def init_db(name) do
     db = db_config(name)
 
     case Couchdb.Connector.Storage.storage_up(db) do
       {:ok, _msg} -> {:ok, db}
+      #  Если БД уже создана, то возвращаем ok
+      {:error, "{\"error\":\"file_exists\",\"reason\":\"The database could not be created, the file already exists.\"}\n"} -> {:ok, db}
       {:error, msg} -> {:error, msg}
     end
   end
 
   def db_config(name) do
     db_name = String.replace("#{name}_#{__MODULE__}", ".", "_")
-              |>String.downcase
+              |> String.downcase
 
     %{@couch_config | database: db_name}
   end
@@ -67,7 +74,7 @@ defmodule Main.Couch.Db do
   """
   def valid_document?(db, key, error) do
     case Reader.get(db, key) do
-      {:ok, data}      -> {:found, data}
+      {:ok, data} -> {:found, data}
       {:error, _error} -> {:error, error}
     end
   end
@@ -91,7 +98,7 @@ defmodule Main.Couch.Db do
   """
   def append_to_document(db, key, field, item, error) do
     with {:ok, data} <- get_document(db, key, error),
-         new_list <-  Util.add_to_list(data[field], item),
+         new_list <- Util.add_to_list(data[field], item),
          update_document(db, data, field, new_list, error) do
       {:ok, item}
 

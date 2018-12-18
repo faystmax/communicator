@@ -14,6 +14,7 @@ defmodule Communicator.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
+      mod: {App, []},
       applications: [:couchdb_connector],
       extra_applications: [:logger]
     ]
@@ -27,7 +28,8 @@ defmodule Communicator.MixProject do
 
       {:earmark, "~> 1.2", only: :dev},
       {:ex_doc, "~> 0.19", only: :dev},
-      {:couchdb_connector, "~> 0.5.0"}
+      {:couchdb_connector, "~> 0.5.0"},
+      {:poison, "~> 3.1"}
 
     ]
   end
