@@ -28,3 +28,8 @@ use Mix.Config
 # here (which is why it is important to import them last).
 #
 #     import_config "#{Mix.env()}.exs"
+config :communicator, database_protocol: "http"
+config :communicator, database_hostname: "localhost"
+config :communicator, database_port: 5984
+config :communicator, database_database: "dbtest"
+config :communicator, app_name: "communicator"
