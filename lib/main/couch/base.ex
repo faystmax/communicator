@@ -10,7 +10,7 @@ defmodule Main.Couch.Base do
   def init_() do
     {:ok, db} = Db.init_db(app_name())
 
-    Db.write_document(db, "app", Poison.encode!(%{"list"=>[]}))
+    Db.write_document(db, "app", Poison.encode!(%{"list" => []}))
   end
 
   def app_name() do
@@ -20,7 +20,7 @@ defmodule Main.Couch.Base do
   #am i wrong with that getter?
   def app_db() do
     app_name()
-    |>Db.db_config()
+    |> Db.db_config()
   end
 
   def get_dbs() do
@@ -31,11 +31,25 @@ defmodule Main.Couch.Base do
     end
   end
 
+  def register_phone({phone, money}) do
+    case check_phone(phone) do
+      :ok -> Db.write_document(app_db(), Poison.encode!(%{"phone" => phone, "money" => money}))
+      :error -> :error
+    end
+  end
+
+  def check_phone(phone) do
+    cond do
+      String.match?(phone, ~r/^((\+7|7|8)+([0-9]){10})$/) -> :ok
+      true -> :error
+    end
+  end
+
   #we need many types of different databases
   def add_database(type) do
     with {:ok, db} <- Db.init_db(type) do
       app_db()
-      |>Db.append_to_document(type, "list", db, "failed to add new database")
+      |> Db.append_to_document(type, "list", db, "failed to add new database")
     else
       _ -> {:error, "could not add db"}
     end

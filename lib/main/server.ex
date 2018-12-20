@@ -1,4 +1,5 @@
 defmodule Main.Server do
+  alias Main.Couch.Base, as: Base
   @moduledoc """
   OTP сервер главного оператора
   """
@@ -14,10 +15,16 @@ defmodule Main.Server do
   def set_state(state) do
     GenServer.call(:main_server, {:set_state, state})
   end
+  def register_phone({phone, money}) do
+    GenServer.call(:main_server, {:register_phone, {phone, money}})
+  end
 
   # SERVER
   def init(_opts) do
     {:ok, %{}}
+  end
+  def handle_call({:register_phone, {phone, money}}, _from, state) do
+    {:reply, Base.register_phone({phone, money}), state}
   end
   def handle_call(:get_state, _from, state) do
     {:reply, state, state}

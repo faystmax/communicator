@@ -35,15 +35,22 @@ defmodule Main.Couch.Db do
   """
   def write_document(db, key, body) do
     case Writer.create(db, body, key) do
-      {:ok, _, _} -> {:ok, "document added"}
-      {:error, _, _} -> {:error, "cound not add document"}
+      {:ok, _, _} -> :ok
+      {:error, _, _} -> {:error, "could not add document"}
     end
   end
 
   def write_document(db, key, body, :map) do
     case Couchdb.Connector.create(db, body, key) do
       {:ok, _} -> {:ok, "document added"}
-      {:error, _} -> {:error, "cound not add document"}
+      {:error, _} -> {:error, "could not add document"}
+    end
+  end
+
+  def write_document(db, body) do
+    case Writer.create(db, body, create_id) do
+      {:ok, _, _} -> :ok
+      {:error, _, _} -> {:error, "could not add document"}
     end
   end
 
