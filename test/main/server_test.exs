@@ -13,10 +13,15 @@ defmodule Main.ServerTest do
   end
 
   test "Register phone number with valid phone"  do
-    assert Main.Server.register_phone({"+79130214521", 5002}) == :ok
+    assert Main.Server.register_phone({"+79130214538", 5002}) == :ok
   end
 
   test "Register phone number with wrong phone"  do
     assert Main.Server.register_phone({"+791252012", 1}) == :error
+  end
+
+  test "Register and Check is phone exist"  do
+    Main.Server.register_phone({"+79131245721", 102})
+    assert Main.Server.is_phone_exist("+79131245721") == :yes
   end
 end

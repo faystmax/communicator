@@ -47,13 +47,6 @@ defmodule Main.Couch.Db do
     end
   end
 
-  def write_document(db, body) do
-    case Writer.create(db, body, create_id) do
-      {:ok, _, _} -> :ok
-      {:error, _, _} -> {:error, "could not add document"}
-    end
-  end
-
   @doc"""
   updates a the couch db docuement.
   Takes the old document, the field name, the new field,
@@ -93,9 +86,8 @@ defmodule Main.Couch.Db do
   """
   def get_document(db, key, error) do
     case Reader.get(db, key) do
-      {:ok, data} ->
-        {:ok, Poison.decode!(data)}
-      {:error, _} -> {:error, error}
+      {:ok, data} ->{:ok, Poison.decode!(data)}
+      {:error, msg} -> {:error, msg}
     end
   end
 

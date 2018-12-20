@@ -33,10 +33,19 @@ defmodule Main.Couch.Base do
 
   def register_phone({phone, money}) do
     case check_phone(phone) do
-      :ok -> Db.write_document(app_db(), Poison.encode!(%{"phone" => phone, "money" => money}))
+      :ok -> Db.write_document(app_db(), phone, Poison.encode!(%{"money" => money}))
       :error -> :error
     end
   end
+
+  def is_phone_exist(phone) do
+    case Db.get_document(app_db(), phone, "") do
+      {:ok, _} -> :yes
+      {:error, "{\"error\":\"not_found\",\"reason\":\"missing\"}\n"} -> :no
+      {:error, msg} -> {:error, msg}
+    end
+  end
+
 
   def check_phone(phone) do
     cond do

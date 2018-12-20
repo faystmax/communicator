@@ -18,6 +18,9 @@ defmodule Main.Server do
   def register_phone({phone, money}) do
     GenServer.call(:main_server, {:register_phone, {phone, money}})
   end
+  def is_phone_exist(phone) do
+    GenServer.call(:main_server, {:is_phone_exist, phone})
+  end
 
   # SERVER
   def init(_opts) do
@@ -25,6 +28,9 @@ defmodule Main.Server do
   end
   def handle_call({:register_phone, {phone, money}}, _from, state) do
     {:reply, Base.register_phone({phone, money}), state}
+  end
+  def handle_call({:is_phone_exist, phone}, _from, state) do
+    {:reply, Base.is_phone_exist(phone), state}
   end
   def handle_call(:get_state, _from, state) do
     {:reply, state, state}
